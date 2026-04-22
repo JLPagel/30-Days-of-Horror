@@ -214,8 +214,89 @@
     position: relative; width: min(340px, 78vw);
     animation: coverIn 1.2s 0.1s cubic-bezier(0.16,1,0.3,1) forwards;
     opacity: 0; transform: translateY(20px) rotate(0.5deg);
+    cursor: pointer;
+    perspective: 1000px;
   }
   @keyframes coverIn { to { opacity:1; transform:translateY(0) rotate(1.5deg); } }
+
+  /* Book wrapper holds cover + pages */
+  .book-inner {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease;
+  }
+
+  /* Pages that fan out on hover */
+  .page {
+    position: absolute;
+    top: 2px; left: 2px; right: 2px; bottom: 2px;
+    border-radius: 4px;
+    transform-origin: left center;
+    transform: rotateY(0deg);
+    transition: transform 0.5s cubic-bezier(0.23,1,0.32,1), opacity 0.4s ease;
+    opacity: 0;
+    z-index: -1;
+  }
+  .page-1 { background: linear-gradient(to right, #e8dfc8, #f5f0e0); }
+  .page-2 { background: linear-gradient(to right, #ddd5bc, #ede8d8); }
+  .page-3 { background: linear-gradient(to right, #d4cab0, #e5deca); }
+  .page-4 { background: linear-gradient(to right, #ccc0a4, #ddd4bc); }
+  .page-5 { background: linear-gradient(to right, #c4b898, #d4ccb0); }
+
+  /* Page edge lines to look like paper */
+  .page::after {
+    content: '';
+    position: absolute;
+    top: 10%; bottom: 10%; right: 8px;
+    width: 1px;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.06) 0px,
+      rgba(0,0,0,0.06) 1px,
+      transparent 1px,
+      transparent 8px
+    );
+  }
+
+  /* Hover state — fan pages open */
+  .cover-frame:hover .page-1 { transform: rotateY(-25deg) translateX(-8px); opacity: 1; transition-delay: 0s; }
+  .cover-frame:hover .page-2 { transform: rotateY(-45deg) translateX(-14px); opacity: 1; transition-delay: 0.04s; }
+  .cover-frame:hover .page-3 { transform: rotateY(-62deg) translateX(-18px); opacity: 1; transition-delay: 0.08s; }
+  .cover-frame:hover .page-4 { transform: rotateY(-75deg) translateX(-20px); opacity: 1; transition-delay: 0.12s; }
+  .cover-frame:hover .page-5 { transform: rotateY(-85deg) translateX(-22px); opacity: 1; transition-delay: 0.16s; }
+
+  /* Cover lifts slightly on hover */
+  .cover-frame:hover .book-inner { transform: translateY(-6px) rotate(-1deg); }
+  .cover-frame:hover .cover-img {
+    box-shadow: 0 0 0 1px rgba(201,168,76,0.3), -4px 4px 0 rgba(139,0,0,0.2), 0 50px 100px rgba(0,0,0,0.9);
+  }
+
+  /* Wind particles */
+  .wind-particle {
+    position: absolute;
+    pointer-events: none;
+    font-size: 0.55rem;
+    color: rgba(212,197,169,0.7);
+    opacity: 0;
+    z-index: 10;
+    white-space: nowrap;
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+  }
+  .cover-frame:hover .wind-particle {
+    animation: windBlow 1.2s ease-out forwards;
+  }
+  .wind-particle:nth-child(1) { top: 20%; left: 60%; animation-delay: 0.1s; }
+  .wind-particle:nth-child(2) { top: 40%; left: 55%; animation-delay: 0.2s; }
+  .wind-particle:nth-child(3) { top: 60%; left: 65%; animation-delay: 0.15s; }
+  .wind-particle:nth-child(4) { top: 30%; left: 70%; animation-delay: 0.25s; }
+  .wind-particle:nth-child(5) { top: 55%; left: 50%; animation-delay: 0.3s; }
+
+  @keyframes windBlow {
+    0%   { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+    20%  { opacity: 0.8; }
+    100% { opacity: 0; transform: translate(60px, -40px) rotate(15deg); }
+  }
 
   .cover-frame::before {
     content: ''; position: absolute; inset: -30px;
@@ -348,6 +429,91 @@
     font-size: 0.85em; letter-spacing: 0.04em;
   }
 
+  /* ══════ COGNITIVE DISSONANCE ══════ */
+  .cog-dis {
+    padding: 6rem 2rem;
+    background: var(--darker);
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .cog-dis-inner { max-width: 920px; margin: 0 auto; }
+
+  .cog-dis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 5rem;
+    align-items: start;
+    margin-top: 2rem;
+  }
+  @media (max-width: 680px) {
+    .cog-dis-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+
+  .cog-def {
+    position: sticky;
+    top: 3rem;
+    padding: 2rem;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 4px;
+    background: rgba(201,168,76,0.03);
+  }
+
+  .cog-term {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1.2;
+    margin-bottom: 0.3rem;
+  }
+
+  .cog-phonetic {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 1.2rem;
+    font-style: italic;
+  }
+
+  .cog-definition {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--pale);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    border-left: 2px solid rgba(201,168,76,0.3);
+    padding-left: 1rem;
+  }
+
+  .cog-source {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .cog-body {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: var(--muted);
+    font-weight: 300;
+  }
+  .cog-body p + p { margin-top: 1.3rem; }
+  .cog-body strong { color: var(--pale); font-weight: 500; }
+
+  .cog-final {
+    margin-top: 2rem !important;
+    padding: 1.5rem;
+    border-left: 2px solid var(--red);
+    background: rgba(192,57,43,0.05);
+    border-radius: 0 4px 4px 0;
+    font-size: 1.02rem !important;
+    color: var(--pale) !important;
+    font-style: italic;
+  }
+
   /* ══════ TWIST ══════ */
   .twist {
     max-width: 700px; margin: 0 auto;
@@ -467,53 +633,6 @@
   .reveal-d1 { transition-delay: 0.1s; }
   .reveal-d2 { transition-delay: 0.2s; }
   .reveal-d3 { transition-delay: 0.3s; }
-
-  .cover-frame { cursor: pointer; perspective: 1000px; }
-  .book-inner {
-    position: relative; transform-style: preserve-3d;
-    transition: transform 0.15s ease;
-  }
-  .page {
-    position: absolute;
-    top: 2px; left: 2px; right: 2px; bottom: 2px;
-    border-radius: 4px; transform-origin: left center;
-    transform: rotateY(0deg);
-    transition: transform 0.5s cubic-bezier(0.23,1,0.32,1), opacity 0.4s ease;
-    opacity: 0; z-index: -1;
-  }
-  .page-1 { background: linear-gradient(to right, #e8dfc8, #f5f0e0); }
-  .page-2 { background: linear-gradient(to right, #ddd5bc, #ede8d8); }
-  .page-3 { background: linear-gradient(to right, #d4cab0, #e5deca); }
-  .page-4 { background: linear-gradient(to right, #ccc0a4, #ddd4bc); }
-  .page-5 { background: linear-gradient(to right, #c4b898, #d4ccb0); }
-  .page::after {
-    content: ''; position: absolute;
-    top: 10%; bottom: 10%; right: 8px; width: 1px;
-    background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.06) 0px, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 8px);
-  }
-  .cover-frame:hover .page-1 { transform: rotateY(-25deg) translateX(-8px); opacity: 1; transition-delay: 0s; }
-  .cover-frame:hover .page-2 { transform: rotateY(-45deg) translateX(-14px); opacity: 1; transition-delay: 0.04s; }
-  .cover-frame:hover .page-3 { transform: rotateY(-62deg) translateX(-18px); opacity: 1; transition-delay: 0.08s; }
-  .cover-frame:hover .page-4 { transform: rotateY(-75deg) translateX(-20px); opacity: 1; transition-delay: 0.12s; }
-  .cover-frame:hover .page-5 { transform: rotateY(-85deg) translateX(-22px); opacity: 1; transition-delay: 0.16s; }
-  .cover-frame:hover .book-inner { transform: translateY(-6px) rotate(-1deg); }
-  .wind-particle {
-    position: absolute; pointer-events: none;
-    font-size: 0.55rem; color: rgba(212,197,169,0.7);
-    opacity: 0; z-index: 10; white-space: nowrap;
-    font-style: italic;
-  }
-  .cover-frame:hover .wind-particle { animation: windBlow 1.2s ease-out forwards; }
-  .wind-particle:nth-child(1) { top: 20%; left: 60%; animation-delay: 0.1s; }
-  .wind-particle:nth-child(2) { top: 40%; left: 55%; animation-delay: 0.2s; }
-  .wind-particle:nth-child(3) { top: 60%; left: 65%; animation-delay: 0.15s; }
-  .wind-particle:nth-child(4) { top: 30%; left: 70%; animation-delay: 0.25s; }
-  .wind-particle:nth-child(5) { top: 55%; left: 50%; animation-delay: 0.3s; }
-  @keyframes windBlow {
-    0%   { opacity: 0; transform: translate(0,0) rotate(0deg); }
-    20%  { opacity: 0.8; }
-    100% { opacity: 0; transform: translate(60px,-40px) rotate(15deg); }
-  }
 </style>
 </head>
 <body>
@@ -549,8 +668,8 @@
     </a>
   </div>
 
-  <div class="hero-right"> 
-<div class="cover-frame">
+  <div class="hero-right">
+    <div class="cover-frame">
       <div class="wind-particle">the stories...</div>
       <div class="wind-particle">october...</div>
       <div class="wind-particle">she knew...</div>
@@ -566,6 +685,7 @@
       </div>
       <div class="cover-note">"The connection she was never supposed to make..."</div>
     </div>
+  </div>
 </section>
 
 <!-- STATS -->
@@ -593,13 +713,16 @@
   <p class="section-eyebrow reveal">The Story</p>
   <div class="synopsis-grid">
     <div class="synopsis-pull reveal">
-      She thought she married a man. What if she married a <em>story?</em>
+      Two people madly in love. Too broken to stay. Too devoted to leave. <em>Until October.</em>
     </div>
     <div class="synopsis-body reveal reveal-d1">
-      <p>It started as something to pass the time. October nights, a marriage that had already ended on paper, and nothing on TV. He promised her thirty days of horror — one story a night, the whole month of October.</p>
-      <p>She only made it through a few. Intimate. Chilling. <strong>Specific in ways that shouldn't have been possible.</strong></p>
-      <p>The details matched real cases. The dates lined up. The victims had names she recognized from old news alerts she'd long forgotten.</p>
-      <p><strong>She made a connection she was never supposed to make.</strong> And she couldn't stay in that house — or that silence — one more night.</p>
+      <p>They were divorced and still sharing a house — not out of convenience, but out of something neither of them could name. She was exhausted. She'd tried to leave before. He held on like letting go would kill him. She just wanted to sleep.</p>
+      <p>Then one night he turned off the TV, looked at her, and said: <strong><em>"Would you ever kill anyone with me?"</em></strong></p>
+      <p>It started there. His first story — his first murder, he said, at eight years old. The night ended with a promise: a new horror story every night for the entire month of October. Thirty days of horror.</p>
+      <p>But the stories started lining up with real events. Real cases. And he told her plainly: <strong><em>"I can prove the story. I just can't tie myself to it."</em></strong> His number one rule — never get caught.</p>
+      <p>He's a writer. A talented one. So now she has to live with the question that changes everything:</p>
+      <p><strong>Is this the most elaborate love story ever told — a gifted man pulling her back in the only way he knows how? Or is she sitting across from a killer, finally hearing the truth?</strong></p>
+      <p>She never made it to thirty. What she heard first was enough.</p>
     </div>
   </div>
 </section>
@@ -625,13 +748,39 @@
   </div>
 </section>
 
-<!-- TWIST -->
+<!-- COGNITIVE DISSONANCE -->
+<section class="cog-dis reveal">
+  <div class="cog-dis-inner">
+    <p class="section-eyebrow">The Weight of It</p>
+
+    <div class="cog-dis-grid">
+
+      <div class="cog-def">
+        <p class="cog-term">Cognitive Dissonance</p>
+        <p class="cog-phonetic">/ ˈkäɡnədiv ˈdisənəns /</p>
+        <p class="cog-definition">
+          The mental discomfort experienced when holding two or more contradictory beliefs, values, or truths at the same time — and being unable to reconcile them into one coherent reality.
+        </p>
+        <p class="cog-source">— Psychology</p>
+      </div>
+
+      <div class="cog-body">
+        <p>In most areas of life, cognitive dissonance is uncomfortable but survivable. You change your mind. You choose a side. You find a way to make the contradiction make sense.</p>
+        <p>But inside a love story — it becomes something else entirely.</p>
+        <p>Because love doesn't follow logic. It holds two truths that should cancel each other out and somehow makes you live inside both of them at once. <strong>I want to leave. I cannot leave.</strong> He is hurting me. He is the only one who truly knows me. This is destroying me. This is the most alive I have ever felt.</p>
+        <p>There is no heavier opposing truth than the one you carry for someone you love. The mind searches desperately for resolution — and finds none. So it just... holds it. All of it. Until something breaks.</p>
+        <p class="cog-final">For her, the breaking point wasn't the end of the love. <strong>It was the moment she had to ask whether the man she loved had ever been who she thought he was at all.</strong> And somehow — that was worse.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
 <section class="twist reveal">
   <p class="section-eyebrow">The Question</p>
-  <div class="twist-line">Did I <span class="red">Marry</span> a Monster?</div>
+  <div class="twist-line">A Love Story. <span class="red">Or a Confession.</span></div>
   <p class="twist-body">
-    Part true crime. Part love story. Part psychological unraveling.
-    This is the book that blurs every line you thought was safe — and the ending will change how you see every page that came before it.
+    He's a writer. She was his greatest love. The stories were dark, detailed, and impossible to disprove.
+    Was he trying to win her back the only way he knew how — or was October his way of finally telling the truth?
   </p>
   <div class="warning-box">
     ⚠ &nbsp; Based on true events. Some details have been changed to protect those still living.
