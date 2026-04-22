@@ -467,6 +467,53 @@
   .reveal-d1 { transition-delay: 0.1s; }
   .reveal-d2 { transition-delay: 0.2s; }
   .reveal-d3 { transition-delay: 0.3s; }
+
+  .cover-frame { cursor: pointer; perspective: 1000px; }
+  .book-inner {
+    position: relative; transform-style: preserve-3d;
+    transition: transform 0.15s ease;
+  }
+  .page {
+    position: absolute;
+    top: 2px; left: 2px; right: 2px; bottom: 2px;
+    border-radius: 4px; transform-origin: left center;
+    transform: rotateY(0deg);
+    transition: transform 0.5s cubic-bezier(0.23,1,0.32,1), opacity 0.4s ease;
+    opacity: 0; z-index: -1;
+  }
+  .page-1 { background: linear-gradient(to right, #e8dfc8, #f5f0e0); }
+  .page-2 { background: linear-gradient(to right, #ddd5bc, #ede8d8); }
+  .page-3 { background: linear-gradient(to right, #d4cab0, #e5deca); }
+  .page-4 { background: linear-gradient(to right, #ccc0a4, #ddd4bc); }
+  .page-5 { background: linear-gradient(to right, #c4b898, #d4ccb0); }
+  .page::after {
+    content: ''; position: absolute;
+    top: 10%; bottom: 10%; right: 8px; width: 1px;
+    background: repeating-linear-gradient(to bottom, rgba(0,0,0,0.06) 0px, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 8px);
+  }
+  .cover-frame:hover .page-1 { transform: rotateY(-25deg) translateX(-8px); opacity: 1; transition-delay: 0s; }
+  .cover-frame:hover .page-2 { transform: rotateY(-45deg) translateX(-14px); opacity: 1; transition-delay: 0.04s; }
+  .cover-frame:hover .page-3 { transform: rotateY(-62deg) translateX(-18px); opacity: 1; transition-delay: 0.08s; }
+  .cover-frame:hover .page-4 { transform: rotateY(-75deg) translateX(-20px); opacity: 1; transition-delay: 0.12s; }
+  .cover-frame:hover .page-5 { transform: rotateY(-85deg) translateX(-22px); opacity: 1; transition-delay: 0.16s; }
+  .cover-frame:hover .book-inner { transform: translateY(-6px) rotate(-1deg); }
+  .wind-particle {
+    position: absolute; pointer-events: none;
+    font-size: 0.55rem; color: rgba(212,197,169,0.7);
+    opacity: 0; z-index: 10; white-space: nowrap;
+    font-style: italic;
+  }
+  .cover-frame:hover .wind-particle { animation: windBlow 1.2s ease-out forwards; }
+  .wind-particle:nth-child(1) { top: 20%; left: 60%; animation-delay: 0.1s; }
+  .wind-particle:nth-child(2) { top: 40%; left: 55%; animation-delay: 0.2s; }
+  .wind-particle:nth-child(3) { top: 60%; left: 65%; animation-delay: 0.15s; }
+  .wind-particle:nth-child(4) { top: 30%; left: 70%; animation-delay: 0.25s; }
+  .wind-particle:nth-child(5) { top: 55%; left: 50%; animation-delay: 0.3s; }
+  @keyframes windBlow {
+    0%   { opacity: 0; transform: translate(0,0) rotate(0deg); }
+    20%  { opacity: 0.8; }
+    100% { opacity: 0; transform: translate(60px,-40px) rotate(15deg); }
+  }
 </style>
 </head>
 <body>
@@ -503,11 +550,22 @@
   </div>
 
   <div class="hero-right"> 
-    <div class="cover-frame">
-      <img class="cover-img" src="Cover_Photo.PNG" alt="30 Days of Horror — Book Cover">
+<div class="cover-frame">
+      <div class="wind-particle">the stories...</div>
+      <div class="wind-particle">october...</div>
+      <div class="wind-particle">she knew...</div>
+      <div class="wind-particle">30 days...</div>
+      <div class="wind-particle">run...</div>
+      <div class="book-inner">
+        <div class="page page-1"></div>
+        <div class="page page-2"></div>
+        <div class="page page-3"></div>
+        <div class="page page-4"></div>
+        <div class="page page-5"></div>
+        <img class="cover-img" src="Cover_Photo.PNG" alt="30 Days of Horror — Book Cover">
+      </div>
       <div class="cover-note">"The connection she was never supposed to make..."</div>
     </div>
-  </div>
 </section>
 
 <!-- STATS -->
